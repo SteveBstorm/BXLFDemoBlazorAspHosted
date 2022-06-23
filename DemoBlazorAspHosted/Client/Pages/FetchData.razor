@@ -1,6 +1,8 @@
 ﻿@page "/fetchdata"
+@using DemoBlazorAspHosted.Client.Tools
 @using DemoBlazorAspHosted.Shared
 @inject HttpClient Http
+@inject ApiRequester Requester
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -35,13 +37,29 @@ else
             }
         </tbody>
     </table>
+
+    <ul>
+        @foreach (Stagiaire item in stagiaires)
+       {
+           <li>@item.FirstName</li>
+       }
+    </ul>
+    //<p>@stagiaires.FirstName</p>
+
 }
 
 @code {
     private WeatherForecast[]? forecasts;
+    private IEnumerable<Stagiaire>? stagiaires { get; set }
+
+    private string token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiI0IiwiZW1haWwiOiJzbEBmb3JtLmJlIiwibmJmIjoxNjU1OTc4Mzk1LCJleHAiOjE2NTU5ODE5OTUsImlhdCI6MTY1NTk3ODM5NSwiaXNzIjoiTWljcm9zb2Z0LkV4dGVuc2lvbnMuQ29uZmlndXJhdGlvbi5Db25maWd1cmF0aW9uU2VjdGlvbiIsImF1ZCI6Ik1pY3Jvc29mdC5FeHRlbnNpb25zLkNvbmZpZ3VyYXRpb24uQ29uZmlndXJhdGlvblNlY3Rpb24ifQ.-9ifVpEwKRPTdZm7YuJyGV2dCH_ZM43dA2uNa6FpTC9usVZbO0uwukOul98lXKUn1r_HeK75dN_qxwUSarEwCg";
 
     protected override async Task OnInitializedAsync()
     {
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+        //stagiaires = await Http.GetFromJsonAsync<Stagiaire>("api/user/1");
+
+        stagiaires = await Requester.Get<IEnumerable<Stagiaire>>("api/user", token);
     }
+
 }

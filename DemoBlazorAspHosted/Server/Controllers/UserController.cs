@@ -42,7 +42,7 @@ namespace DemoBlazorAspHosted.Server.Controllers
 
             return Ok(connectedUser);
         }
-        [Authorize("isConnected")]
+        //[Authorize("isConnected")]
         [HttpGet]
         public IActionResult GetAll()
         {
